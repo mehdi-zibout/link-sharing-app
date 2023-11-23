@@ -1,17 +1,27 @@
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { Form, Submit } from '@redwoodjs/forms'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+import { Form } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 
 import EmailIcon from 'src/assets/EmailIcon'
-import Logo from 'src/assets/Logo'
 import PasswordIcon from 'src/assets/PasswordIcon'
 import { useAuth } from 'src/auth'
+import { Button } from 'src/components/Button/Button'
 import Input from 'src/components/Input/Input'
+import AuthLayout from 'src/layouts/AuthLayout/AuthLayout'
 
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
+
+type LoginFormData = z.infer<typeof loginSchema>
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
 
@@ -26,7 +36,7 @@ const LoginPage = () => {
     emailRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data: Record<string, string>) => {
+  const onSubmit = async (data: LoginFormData) => {
     const response = await logIn({
       username: data.email,
       password: data.password,
@@ -44,29 +54,27 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" />
-      <main className="p-8">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <header className="mb-10">
-          <Logo className="w-[182.5px] h-10 mb-16" />
-          <h1 className="font-bold text-dark-grey text-[1.5rem] leading-[150%] mb-2">
+      <AuthLayout>
+        <div className="mb-10">
+          <h1 className="mb-2 text-[1.5rem] font-bold leading-[150%] text-dark-grey md:text-hm">
             Login
           </h1>
-          <p className="text-grey  text-bm">
+          <p className="text-bm  text-grey">
             Add your details below to get back into the app
           </p>
-        </header>
-        <Form onSubmit={onSubmit} className="space-y-6">
+        </div>
+        <Form
+          onSubmit={onSubmit}
+          config={{ resolver: zodResolver(loginSchema) }}
+          className="space-y-6"
+        >
           <Input
             label="Email address"
             name="email"
             placeholder="e.g. alex@email.com"
             Icon={EmailIcon}
-            validation={{
-              required: {
-                value: true,
-                message: "Can't be empty",
-              },
-            }}
+            ref={emailRef}
+            type="email"
           />
           <Input
             label="Password"
@@ -74,22 +82,18 @@ const LoginPage = () => {
             type="password"
             placeholder="Enter your password"
             Icon={PasswordIcon}
-            validation={{
-              required: {
-                value: true,
-                message: "Can't be empty",
-              },
-            }}
           />
-          <Submit className="rw-button rw-button-blue">Login</Submit>
-          <div className="text-bm text-center">
-            <p className=" text-grey">Don’t have an account?</p>
-            <p className=" text-purple">
-              <Link to={routes.signup()}>Create account</Link>
-            </p>
-          </div>
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+          <p className="text-center text-bm text-grey">
+            Don’t have an account? <br className="md:hidden" />{' '}
+            <Link className="text-purple" to={routes.signup()}>
+              Create account
+            </Link>
+          </p>
         </Form>
-      </main>
+      </AuthLayout>
     </>
   )
 }

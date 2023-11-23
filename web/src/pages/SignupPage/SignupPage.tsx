@@ -1,19 +1,33 @@
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import {
-  Form,
-  Label,
-  TextField,
-  PasswordField,
-  FieldError,
-  Submit,
-} from '@redwoodjs/forms'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+import { Form } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+import { toast } from '@redwoodjs/web/toast'
 
+import EmailIcon from 'src/assets/EmailIcon'
+import PasswordIcon from 'src/assets/PasswordIcon'
 import { useAuth } from 'src/auth'
+import { Button } from 'src/components/Button/Button'
+import Input from 'src/components/Input/Input'
+import AuthLayout from 'src/layouts/AuthLayout/AuthLayout'
+
+const signUpSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine(({ confirmPassword, password }) => password === confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  })
+
+type SignUpFormData = z.infer<typeof signUpSchema>
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -30,7 +44,7 @@ const SignupPage = () => {
     emailRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data: Record<string, string>) => {
+  const onSubmit = async (data: SignUpFormData) => {
     const response = await signUp({
       username: data.email,
       password: data.password,
@@ -50,76 +64,57 @@ const SignupPage = () => {
     <>
       <MetaTags title="Signup" />
 
-      <main className="rw-main">
-        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <div className="rw-scaffold rw-login-container">
-          <div className="rw-segment">
-            <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">Signup</h2>
-            </header>
-
-            <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <Label
-                    name="email"
-                    className="rw-label"
-                    errorClassName="rw-label rw-label-error"
-                  >
-                    Email
-                  </Label>
-                  <TextField
-                    name="email"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    ref={emailRef}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Email is required',
-                      },
-                    }}
-                  />
-                  <FieldError name="email" className="rw-field-error" />
-
-                  <Label
-                    name="password"
-                    className="rw-label"
-                    errorClassName="rw-label rw-label-error"
-                  >
-                    Password
-                  </Label>
-                  <PasswordField
-                    name="password"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    autoComplete="current-password"
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Password is required',
-                      },
-                    }}
-                  />
-                  <FieldError name="password" className="rw-field-error" />
-
-                  <div className="rw-button-group">
-                    <Submit className="rw-button rw-button-blue">
-                      Sign Up
-                    </Submit>
-                  </div>
-                </Form>
-              </div>
-            </div>
-          </div>
-          <div className="rw-login-link">
-            <span>Already have an account?</span>{' '}
-            <Link to={routes.login()} className="rw-link">
-              Log in!
-            </Link>
-          </div>
+      <AuthLayout>
+        <div className="mb-10">
+          <h1 className="mb-2 text-[1.5rem] font-bold leading-[150%] text-dark-grey md:text-hm">
+            Create account
+          </h1>
+          <p className="text-bm  text-grey">
+            Let’s get you started sharing your links!
+          </p>
         </div>
-      </main>
+        <Form
+          onSubmit={onSubmit}
+          config={{
+            resolver: zodResolver(signUpSchema),
+          }}
+          className="space-y-6"
+        >
+          <Input
+            label="Email address"
+            ref={emailRef}
+            name="email"
+            placeholder="e.g. alex@email.com"
+            Icon={EmailIcon}
+          />
+          <Input
+            label="Create Password"
+            name="password"
+            type="password"
+            placeholder="At least 8 characters"
+            Icon={PasswordIcon}
+          />
+          <Input
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            placeholder="At least 8 characters"
+            Icon={PasswordIcon}
+          />
+          <p className="text-bs text-grey">
+            Password must contain at least 8 characters
+          </p>
+          <Button type="submit" className="w-full">
+            Create new account
+          </Button>
+          <p className="text-center text-bm text-grey">
+            Don’t have an account? <br className="md:hidden" />{' '}
+            <Link className="text-purple" to={routes.login()}>
+              Login
+            </Link>
+          </p>
+        </Form>
+      </AuthLayout>
     </>
   )
 }
