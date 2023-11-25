@@ -42,6 +42,7 @@ export default function SessionProvider({
     {
       variables: { id },
       skip: id === 0,
+      fetchPolicy: 'cache-first',
     }
   )
 

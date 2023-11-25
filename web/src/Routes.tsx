@@ -17,13 +17,14 @@ import SessionProvider from './SessionContext/SessionContext'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route path="/user/{id:Int}" page={UserPage} name="user" />
       <Set wrap={AuthLayout}>
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
       </Set>
       <PrivateSet unauthenticated="login">
-        <Set wrap={AppLayout}>
-          <Set wrap={SessionProvider}>
+        <Set wrap={SessionProvider}>
+          <Set wrap={AppLayout}>
             <Route path="/links" page={LinksPage} name="links" />
             <Route path="/profile-details" page={ProfileDetailsPage} name="profileDetails" />
           </Set>
