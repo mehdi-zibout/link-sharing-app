@@ -14,7 +14,7 @@ import PasswordIcon from 'src/assets/PasswordIcon'
 import { useAuth } from 'src/auth'
 import { Button } from 'src/components/Button/Button'
 import Input from 'src/components/Input/Input'
-import AuthLayout from 'src/layouts/AuthLayout/AuthLayout'
+import TitleWithDescription from 'src/components/TitleWithDescription/TitleWithDescription'
 
 const signUpSchema = z
   .object({
@@ -64,57 +64,53 @@ const SignupPage = () => {
     <>
       <MetaTags title="Signup" />
 
-      <AuthLayout>
-        <div className="mb-10">
-          <h1 className="mb-2 text-[1.5rem] font-bold leading-[150%] text-dark-grey md:text-hm">
-            Create account
-          </h1>
-          <p className="text-bm  text-grey">
-            Let’s get you started sharing your links!
-          </p>
-        </div>
-        <Form
-          onSubmit={onSubmit}
-          config={{
-            resolver: zodResolver(signUpSchema),
-          }}
-          className="space-y-6"
-        >
-          <Input
-            label="Email address"
-            ref={emailRef}
-            name="email"
-            placeholder="e.g. alex@email.com"
-            Icon={EmailIcon}
-          />
-          <Input
-            label="Create Password"
-            name="password"
-            type="password"
-            placeholder="At least 8 characters"
-            Icon={PasswordIcon}
-          />
-          <Input
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-            placeholder="At least 8 characters"
-            Icon={PasswordIcon}
-          />
-          <p className="text-bs text-grey">
-            Password must contain at least 8 characters
-          </p>
-          <Button type="submit" className="w-full">
-            Create new account
-          </Button>
-          <p className="text-center text-bm text-grey">
-            Don’t have an account? <br className="md:hidden" />{' '}
-            <Link className="text-purple" to={routes.login()}>
-              Login
-            </Link>
-          </p>
-        </Form>
-      </AuthLayout>
+      <div className="mb-10">
+        <TitleWithDescription
+          title="Create account"
+          description="Let’s get you started sharing your links!"
+        />
+      </div>
+      <Form
+        onSubmit={onSubmit}
+        config={{
+          resolver: zodResolver(signUpSchema),
+        }}
+        className="space-y-6"
+      >
+        <Input
+          label="Email address"
+          ref={emailRef}
+          name="email"
+          placeholder="e.g. alex@email.com"
+          Icon={EmailIcon}
+        />
+        <Input
+          label="Create Password"
+          name="password"
+          type="password"
+          placeholder="At least 8 characters"
+          Icon={PasswordIcon}
+        />
+        <Input
+          label="Confirm Password"
+          name="confirmPassword"
+          type="password"
+          placeholder="At least 8 characters"
+          Icon={PasswordIcon}
+        />
+        <p className="text-bs text-grey">
+          Password must contain at least 8 characters
+        </p>
+        <Button type="submit" className="w-full">
+          Create new account
+        </Button>
+        <p className="text-center text-bm text-grey">
+          Don’t have an account? <br className="md:hidden" />{' '}
+          <Link className="text-purple" to={routes.login()}>
+            Login
+          </Link>
+        </p>
+      </Form>
     </>
   )
 }

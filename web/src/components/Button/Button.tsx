@@ -11,7 +11,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: 'bg-purple text-white hover:bg-purple-hover',
-        secondary: 'border border-purple bg-white hover:bg-purple-hover',
+        secondary:
+          'border border-purple bg-white hover:bg-light-purple text-purple',
       },
     },
     defaultVariants: {

@@ -8,6 +8,7 @@ import {
 } from '@redwoodjs/forms'
 
 interface InputProps extends ComponentProps<'input'> {
+  name: string
   label: string
   Icon?: (props: SVGProps<SVGSVGElement>) => React.JSX.Element
   validation?: UseRegisterProps['validation']
@@ -33,8 +34,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     })
 
     const { className: inputClassName } = useErrorStyles({
-      className: `w-full rounded-lg py-3 pr-4 pl-11 border border-borders placeholder:text-dark-grey text-dark-grey bg-white leading-[150%] text-bm placeholder:opacity-50 hover:border-purple hover:shadow-app focus:shadow-app focus:border-purple outline-none transition duration-300`,
-      errorClassName: `w-full rounded-lg py-3 pr-4 pl-11 border bg-white leading-[150%] text-bm placeholder:opacity-50   focus:border-red outline-none transition duration-300 border-red text-red`,
+      className: `w-full caret-purple rounded-lg py-3 pr-4 ${
+        Icon ? 'pl-11' : 'pl-4'
+      } border border-borders placeholder:text-dark-grey text-dark-grey bg-white leading-[150%] text-bm placeholder:opacity-50 hover:border-purple hover:shadow-app focus:shadow-app focus:border-purple outline-none transition duration-300`,
+      errorClassName: `w-full caret-purple rounded-lg py-3 pr-4 ${
+        Icon ? 'pl-11' : 'pl-4'
+      }border bg-white leading-[150%] text-bm placeholder:opacity-50   focus:border-red outline-none transition duration-300 border-red text-red`,
       name,
     })
     return (
@@ -51,7 +56,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
             {...register}
           />
-          <Icon className="absolute inset-y-0 left-4 top-px my-auto h-4 w-4" />
+          {Icon && (
+            <Icon className="absolute  inset-y-0 left-4 top-px my-auto h-4 w-4 fill-grey" />
+          )}
           <FieldError
             name={name}
             className="absolute inset-y-0 right-4 my-auto block h-fit text-bs text-red"

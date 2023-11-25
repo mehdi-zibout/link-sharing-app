@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@redwoodjs/auth-dbauth-web": "6.4.0",
     "@redwoodjs/forms": "6.4.0",
@@ -19,6 +21,7 @@
     "@redwoodjs/web": "6.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "filestack-react": "^4.0.1",
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -27,11 +30,14 @@
   },
   "devDependencies": {
     "@redwoodjs/vite": "6.4.0",
+    "@svgr/cli": "^8.1.0",
+    "@types/filestack-react": "^4.0.4",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
+    "prettier-plugin-tailwindcss": "0.4.1",
     "tailwindcss": "^3.3.5"
   }
 }

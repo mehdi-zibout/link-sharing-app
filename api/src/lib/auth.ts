@@ -38,11 +38,6 @@ export const getCurrentUser = async (session: Decoded) => {
     where: { id: session.id },
     select: {
       id: true,
-      firstName: true,
-      lastName: true,
-      links: true,
-      publicEmail: true,
-      profilePicture: true,
     },
   })
 }

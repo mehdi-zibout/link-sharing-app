@@ -14,7 +14,7 @@ import PasswordIcon from 'src/assets/PasswordIcon'
 import { useAuth } from 'src/auth'
 import { Button } from 'src/components/Button/Button'
 import Input from 'src/components/Input/Input'
-import AuthLayout from 'src/layouts/AuthLayout/AuthLayout'
+import TitleWithDescription from 'src/components/TitleWithDescription/TitleWithDescription'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -54,46 +54,42 @@ const LoginPage = () => {
   return (
     <>
       <MetaTags title="Login" />
-      <AuthLayout>
-        <div className="mb-10">
-          <h1 className="mb-2 text-[1.5rem] font-bold leading-[150%] text-dark-grey md:text-hm">
-            Login
-          </h1>
-          <p className="text-bm  text-grey">
-            Add your details below to get back into the app
-          </p>
-        </div>
-        <Form
-          onSubmit={onSubmit}
-          config={{ resolver: zodResolver(loginSchema) }}
-          className="space-y-6"
-        >
-          <Input
-            label="Email address"
-            name="email"
-            placeholder="e.g. alex@email.com"
-            Icon={EmailIcon}
-            ref={emailRef}
-            type="email"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-            Icon={PasswordIcon}
-          />
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <p className="text-center text-bm text-grey">
-            Don’t have an account? <br className="md:hidden" />{' '}
-            <Link className="text-purple" to={routes.signup()}>
-              Create account
-            </Link>
-          </p>
-        </Form>
-      </AuthLayout>
+      <div className="mb-10">
+        <TitleWithDescription
+          title="Login"
+          description="Add your details below to get back into the app"
+        />
+      </div>
+      <Form
+        onSubmit={onSubmit}
+        config={{ resolver: zodResolver(loginSchema) }}
+        className="space-y-6"
+      >
+        <Input
+          label="Email address"
+          name="email"
+          placeholder="e.g. alex@email.com"
+          Icon={EmailIcon}
+          ref={emailRef}
+          type="email"
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          Icon={PasswordIcon}
+        />
+        <Button type="submit" className="w-full">
+          Login
+        </Button>
+        <p className="text-center text-bm text-grey">
+          Don’t have an account? <br className="md:hidden" />{' '}
+          <Link className="text-purple" to={routes.signup()}>
+            Create account
+          </Link>
+        </p>
+      </Form>
     </>
   )
 }
