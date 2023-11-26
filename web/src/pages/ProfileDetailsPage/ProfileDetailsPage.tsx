@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -15,7 +15,10 @@ import CardWithButton from 'src/components/CardWithButton/CardWithButton'
 import ImageUploadButton from 'src/components/ImageUpload/ImageUploadButton'
 import Input from 'src/components/Input/Input'
 import TitleWithDescription from 'src/components/TitleWithDescription/TitleWithDescription'
-import { useSession } from 'src/SessionContext/SessionContext'
+import {
+  optimisticSession,
+  useSession,
+} from 'src/SessionContext/SessionContext'
 
 const ImageUpload = lazy(() => import('src/components/ImageUpload/ImageUpload'))
 
@@ -62,7 +65,21 @@ const ProfileDetailsPage = () => {
   const onSubmit: SubmitHandler<ProfileDetailsFormData> = async (data) => {
     mutate({ variables: { input: data } })
   }
-  console.log(formMethods.formState.errors)
+  const optimisticDetails = formMethods.watch()
+  useEffect(() => {
+    optimisticSession({
+      ...optimisticSession(),
+      firstName: optimisticDetails.firstName,
+      lastName: optimisticDetails.lastName,
+      profilePicture: optimisticDetails.profilePicture,
+      publicEmail: optimisticDetails.publicEmail,
+    })
+  }, [
+    optimisticDetails.firstName,
+    optimisticDetails.lastName,
+    optimisticDetails.profilePicture,
+    optimisticDetails.publicEmail,
+  ])
   return (
     <>
       <MetaTags title="Profile Details" description="ProfileDetails page" />
@@ -77,45 +94,46 @@ const ProfileDetailsPage = () => {
             title="Profile Details"
             description="Add your details to create a personal touch to your profile."
           />
-
-          <Card className="mb-6 mt-10">
-            <h2 className="mb-4 text-bm text-grey">Profile picture</h2>
-            <Controller
-              control={formMethods.control}
-              name="profilePicture"
-              render={({ field }) => (
-                <Suspense
-                  fallback={<ImageUploadButton imageUrl={field.value} />}
-                >
-                  <ImageUpload
-                    imageUrl={field.value}
-                    onChange={(imageUrl) => field.onChange(imageUrl)}
-                  />
-                </Suspense>
-              )}
-            />
-            <p className="text-bs text-grey">
-              Image must be below 1024x1024px. Use PNG or JPG format.
-            </p>
-          </Card>
-          <Card className="space-y-3">
-            <Input
-              label="First Name*"
-              placeholder="e.g. John"
-              name="firstName"
-            />
-            <Input
-              label="Last Name*"
-              name="lastName"
-              placeholder="e.g. Appleseed"
-            />
-            <Input
-              label="Email"
-              name="publicEmail"
-              placeholder="e.g. email@example.com"
-              type="email"
-            />
-          </Card>
+          <div className="h-[calc(100vh-350px)] overflow-y-auto md:h-[calc(100vh-430px)] xl:h-[calc(100vh-442px)]">
+            <Card className="mb-6 mt-10">
+              <h2 className="mb-4 text-bm text-grey">Profile picture</h2>
+              <Controller
+                control={formMethods.control}
+                name="profilePicture"
+                render={({ field }) => (
+                  <Suspense
+                    fallback={<ImageUploadButton imageUrl={field.value} />}
+                  >
+                    <ImageUpload
+                      imageUrl={field.value}
+                      onChange={(imageUrl) => field.onChange(imageUrl)}
+                    />
+                  </Suspense>
+                )}
+              />
+              <p className="text-bs text-grey">
+                Image must be below 1024x1024px. Use PNG or JPG format.
+              </p>
+            </Card>
+            <Card className="space-y-3">
+              <Input
+                label="First Name*"
+                placeholder="e.g. John"
+                name="firstName"
+              />
+              <Input
+                label="Last Name*"
+                name="lastName"
+                placeholder="e.g. Appleseed"
+              />
+              <Input
+                label="Email"
+                name="publicEmail"
+                placeholder="e.g. email@example.com"
+                type="email"
+              />
+            </Card>
+          </div>
         </CardWithButton>
       </Form>
     </>

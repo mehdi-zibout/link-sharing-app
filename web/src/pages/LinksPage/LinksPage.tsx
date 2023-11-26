@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateLinks, UpdateLinksVariables } from 'types/graphql'
 import { z } from 'zod'
@@ -10,7 +12,10 @@ import CardWithButton from 'src/components/CardWithButton/CardWithButton'
 import LinkInput from 'src/components/LinkInput/LinkInput'
 import LinksEmptyState from 'src/components/LinksEmptyState/LinksEmptyState'
 import TitleWithDescription from 'src/components/TitleWithDescription/TitleWithDescription'
-import { useSession } from 'src/SessionContext/SessionContext'
+import {
+  optimisticSession,
+  useSession,
+} from 'src/SessionContext/SessionContext'
 import { platformsId } from 'src/utils/PlatformsData'
 
 const LINKS_FORM_SCHEMA = z.object({
@@ -60,9 +65,21 @@ const LinksPage = () => {
   )
   const onSubmit: SubmitHandler<LinksFormData> = async (data) => {
     mutate({
-      variables: { input: data.links },
+      variables: {
+        input: data.links.map((link, index) => ({ ...link, order: index + 1 })),
+      },
     })
   }
+
+  const optimisticLinks = formMethods.watch()
+
+  useEffect(() => {
+    optimisticSession({
+      ...optimisticSession(),
+      links: optimisticLinks.links,
+    })
+  })
+
   return (
     <>
       <MetaTags title="Links" description="Links page" />

@@ -1,10 +1,19 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 
+import { makeVar } from '@apollo/client'
 import { UserDetails, UserDetailsVariables } from 'types/graphql'
 
 import { useQuery } from '@redwoodjs/web'
 
 import { useAuth } from 'src/auth'
+
+type OptimsticSessionType = Omit<NonNullable<UserDetails['user']>, 'links'> & {
+  links: Array<Omit<NonNullable<UserDetails['user']>['links'][number], 'id'>>
+}
+
+export const optimisticSession = makeVar<OptimsticSessionType>(
+  {} as OptimsticSessionType
+)
 
 const SessionContext = createContext<NonNullable<UserDetails['user']>>(
   {} as NonNullable<UserDetails['user']>
@@ -45,6 +54,11 @@ export default function SessionProvider({
       fetchPolicy: 'cache-first',
     }
   )
+
+  useEffect(() => {
+    if (!data?.user) return
+    optimisticSession(data.user)
+  }, [data])
 
   if (loading) {
     return <div className="">loading ...</div>
