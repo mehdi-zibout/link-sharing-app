@@ -154,7 +154,6 @@ const LinksPage = () => {
                       index={index}
                       control={formMethods.control}
                       register={formMethods.register}
-                      move={move}
                       remove={remove}
                     />
                   )

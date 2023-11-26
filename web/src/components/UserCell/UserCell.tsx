@@ -38,7 +38,7 @@ export const Success = ({
   user,
 }: CellSuccessProps<FindUserQuery, FindUserQueryVariables>) => {
   return (
-    <div>
+    <>
       {user.profilePicture ? (
         <img
           src={user.profilePicture}
@@ -54,13 +54,13 @@ export const Success = ({
       <p className="mb-14 mt-2 text-center text-bm text-grey">
         {user.publicEmail}
       </p>
-      <ul className="space-y-5 px-[69px]">
+      <ul className="space-y-5">
         {user.links.map((link) => (
-          <li key={link.id} className="">
+          <li key={link.id}>
             <PlatformLink platformId={link.platform} path={link.path} />
           </li>
         ))}
       </ul>
-    </div>
+    </>
   )
 }

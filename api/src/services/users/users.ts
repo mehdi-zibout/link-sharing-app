@@ -22,6 +22,6 @@ export const updateUser: MutationResolvers['updateUser'] = ({ input }) => {
 export const User: UserRelationResolvers = {
   links: async (_obj, { root }) => {
     const links = await db.user.findUnique({ where: { id: root?.id } }).links()
-    return links ?? []
+    return links?.sort((a, b) => a.order - b.order) ?? []
   },
 }

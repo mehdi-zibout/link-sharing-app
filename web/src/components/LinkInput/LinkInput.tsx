@@ -5,7 +5,6 @@ import { CSS } from '@dnd-kit/utilities'
 import {
   Control,
   Controller,
-  UseFieldArrayMove,
   UseFieldArrayRemove,
   UseFormRegister,
 } from '@redwoodjs/forms'
@@ -22,7 +21,6 @@ type LinkInputProps = {
   register: UseFormRegister<LinksFormData>
   control: Control<LinksFormData>
   index: number
-  move: UseFieldArrayMove
   remove: UseFieldArrayRemove
   dragHandlerId: UniqueIdentifier
 }

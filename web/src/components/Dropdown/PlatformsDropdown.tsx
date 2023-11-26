@@ -45,12 +45,7 @@ const PlatformsDropdown = ({ onChange, value }: PlatformsDropdownProps) => {
             side="bottom"
             sideOffset={8}
             sticky="always"
-            className="rounded-lg bg-white px-4 py-3"
-            style={{
-              maxHeight: 'var(--radix-select-content-available-height)',
-              width: 'var(--radix-select-trigger-width)',
-              boxShadow: '0px 0px 32px 0px rgba(0, 0, 0, 0.10)',
-            }}
+            className="max-h-[var(--radix-select-content-available-height)] w-[var(--radix-select-trigger-width)] rounded-lg bg-white px-4 py-3 shadow-card"
           >
             <Select.Viewport>
               {platforms.map(({ id, Icon, label }, index) => (
