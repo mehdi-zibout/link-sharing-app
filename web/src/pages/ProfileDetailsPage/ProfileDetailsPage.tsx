@@ -23,10 +23,14 @@ import {
 const ImageUpload = lazy(() => import('src/components/ImageUpload/ImageUpload'))
 
 const PROFILE_DETAILS_FORM_SCHEMA = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  publicEmail: z.string().email().optional(),
-  profilePicture: z.string().url().optional(),
+  firstName: z
+    .string({ required_error: "Can't be empty" })
+    .min(1, "Can't be empty"),
+  lastName: z
+    .string({ required_error: "Can't be empty" })
+    .min(1, "Can't be empty"),
+  publicEmail: z.string().email().optional().or(z.literal('')),
+  profilePicture: z.string().url().optional().or(z.literal('')),
 })
 
 export type ProfileDetailsFormData = z.infer<typeof PROFILE_DETAILS_FORM_SCHEMA>
@@ -50,8 +54,8 @@ const ProfileDetailsPage = () => {
     defaultValues: {
       firstName: firstName ?? '',
       lastName: lastName ?? '',
-      profilePicture: profilePicture ?? undefined,
-      publicEmail: publicEmail ?? undefined,
+      profilePicture: profilePicture ?? '',
+      publicEmail: publicEmail ?? '',
     },
 
     resolver: zodResolver(PROFILE_DETAILS_FORM_SCHEMA),

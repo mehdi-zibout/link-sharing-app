@@ -2,13 +2,13 @@ import Card from '../Card/Card'
 
 const LinksEmptyState = () => {
   return (
-    <Card>
+    <Card className="md:py-[82.5px] xl:py-[62.5px]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="125"
         height="81"
         viewBox="0 0 125 81"
-        className="mx-auto md:mt-[62.5px] md:h-[160px] md:w-[250px] "
+        className="mx-auto md:h-[160px] md:w-[250px] "
         fill="none"
       >
         <path

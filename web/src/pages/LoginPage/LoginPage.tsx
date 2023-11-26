@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Form } from '@redwoodjs/forms'
+import { Form, useForm } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -18,12 +18,16 @@ import TitleWithDescription from 'src/components/TitleWithDescription/TitleWithD
 
 const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8, 'Password must have at least 8 characters'),
 })
 
 type LoginFormData = z.infer<typeof loginSchema>
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
+
+  const formMethods = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  })
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -45,7 +49,16 @@ const LoginPage = () => {
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
-      toast.error(response.error)
+      switch (response.error) {
+        case 'not_found': {
+          formMethods.setError('email', { message: 'Please check again' })
+          break
+        }
+        case 'incorrect_password': {
+          formMethods.setError('password', { message: 'Please check again' })
+          break
+        }
+      }
     } else {
       toast.success('Welcome back!')
     }
@@ -60,11 +73,7 @@ const LoginPage = () => {
           description="Add your details below to get back into the app"
         />
       </div>
-      <Form
-        onSubmit={onSubmit}
-        config={{ resolver: zodResolver(loginSchema) }}
-        className="space-y-6"
-      >
+      <Form formMethods={formMethods} onSubmit={onSubmit} className="space-y-6">
         <Input
           label="Email address"
           name="email"
@@ -80,7 +89,11 @@ const LoginPage = () => {
           placeholder="Enter your password"
           Icon={PasswordIcon}
         />
-        <Button type="submit" className="w-full">
+        <Button
+          disabled={formMethods.formState.isSubmitting}
+          type="submit"
+          className="w-full"
+        >
           Login
         </Button>
         <p className="text-center text-bm text-grey">

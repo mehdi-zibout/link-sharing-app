@@ -37,7 +37,9 @@ const LINKS_FORM_SCHEMA = z.object({
     z.object({
       order: z.number().min(0),
       platform: z.enum(platformsId),
-      path: z.string().url(),
+      path: z
+        .string({ required_error: "Can't be empty" })
+        .url('Please check the URL'),
     })
   ),
 })

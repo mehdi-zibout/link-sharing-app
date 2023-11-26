@@ -42,7 +42,7 @@ const LinkInput = ({
     <Card style={style} className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
-          <button ref={setNodeRef} {...attributes} {...listeners}>
+          <button type="button" ref={setNodeRef} {...attributes} {...listeners}>
             <DragHandler className="h-1.5 w-3" />
             <span className="sr-only">Reorder</span>
           </button>

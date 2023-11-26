@@ -5,6 +5,7 @@ import { UserDetails, UserDetailsVariables } from 'types/graphql'
 
 import { useQuery } from '@redwoodjs/web'
 
+import Logo from 'src/assets/Logo'
 import { useAuth } from 'src/auth'
 
 type OptimsticSessionType = Omit<NonNullable<UserDetails['user']>, 'links'> & {
@@ -61,7 +62,11 @@ export default function SessionProvider({
   }, [data])
 
   if (loading) {
-    return <div className="">loading ...</div>
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-light-grey">
+        <Logo className="w-60 animate-pulse" />
+      </div>
+    )
   }
 
   if (error) {

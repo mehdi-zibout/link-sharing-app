@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Form } from '@redwoodjs/forms'
+import { Form, useForm } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -30,6 +30,10 @@ const signUpSchema = z
 type SignUpFormData = z.infer<typeof signUpSchema>
 
 const SignupPage = () => {
+  const formMethods = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+  })
+
   const { isAuthenticated, signUp } = useAuth()
 
   useEffect(() => {
@@ -70,13 +74,7 @@ const SignupPage = () => {
           description="Let’s get you started sharing your links!"
         />
       </div>
-      <Form
-        onSubmit={onSubmit}
-        config={{
-          resolver: zodResolver(signUpSchema),
-        }}
-        className="space-y-6"
-      >
+      <Form onSubmit={onSubmit} formMethods={formMethods} className="space-y-6">
         <Input
           label="Email address"
           ref={emailRef}
@@ -101,7 +99,11 @@ const SignupPage = () => {
         <p className="text-bs text-grey">
           Password must contain at least 8 characters
         </p>
-        <Button type="submit" className="w-full">
+        <Button
+          disabled={formMethods.formState.isSubmitting}
+          type="submit"
+          className="w-full"
+        >
           Create new account
         </Button>
         <p className="text-center text-bm text-grey">

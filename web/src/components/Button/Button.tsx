@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import classNames from 'src/utils/classNames'
 
 const buttonVariants = cva(
-  'rounded-lg px-[27px] py-[11px] text-hs transition duration-300  disabled:opacity-25 font-semibold',
+  'rounded-lg px-[27px] py-[11px] text-hs transition duration-300 disabled:cursor-not-allowed  disabled:opacity-25 font-semibold',
   {
     variants: {
       variant: {

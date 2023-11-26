@@ -25,7 +25,7 @@ const NAV_LINKS = [
 const AppLayout = ({ children }: AppLayoutProps) => {
   const { id } = useSession()
   return (
-    <main className="min-h-screen bg-light-grey pb-6 md:p-6">
+    <main className="bg-light-grey pb-6 md:p-6">
       <header className="flex items-center justify-between rounded-xl bg-white px-6 py-4 md:pr-4">
         <Link to={routes.home()}>
           <LogoIcon className="h-8 w-8 md:hidden" />

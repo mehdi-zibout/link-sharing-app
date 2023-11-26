@@ -39,7 +39,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       } border border-borders placeholder:text-dark-grey text-dark-grey bg-white leading-[150%] text-bm placeholder:opacity-50 hover:border-purple hover:shadow-app focus:shadow-app focus:border-purple outline-none transition duration-300`,
       errorClassName: `w-full caret-purple rounded-lg py-3 pr-4 ${
         Icon ? 'pl-11' : 'pl-4'
-      }border bg-white leading-[150%] text-bm placeholder:opacity-50   focus:border-red outline-none transition duration-300 border-red text-red`,
+      } border bg-white leading-[150%] text-bm placeholder:opacity-50   focus:border-red outline-none transition duration-300 border-red text-red`,
       name,
     })
     return (
@@ -61,7 +61,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           <FieldError
             name={name}
-            className="absolute inset-y-0 right-4 my-auto block h-fit text-bs text-red"
+            className="absolute inset-y-0 right-4 my-auto block h-fit bg-white pl-2 text-bs text-red"
           />
         </div>
       </div>

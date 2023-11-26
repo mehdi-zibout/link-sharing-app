@@ -12,6 +12,10 @@ const MobilePreview = () => {
   const svgWidth = svgRef.current?.getBBox().width
   const svgHeight = svgRef.current?.getBBox().height
   const session = useReactiveVar(optimisticSession)
+  const initialLinksNumber = svgHeight
+    ? Math.floor((svgHeight - 0.6 * svgHeight) / 64)
+    : 5
+  console.log(svgHeight ? initialLinksNumber : 'initialLinksNumber')
 
   return (
     <Card className="hidden  bg-white p-6 xl:block xl:h-[calc(100vh-183.5px)] ">
@@ -53,18 +57,29 @@ const MobilePreview = () => {
               height: svgHeight ? svgHeight - 0.6 * svgHeight : undefined,
             }}
           >
-            {new Array(Math.max(session?.links?.length ?? 0, 5))
+            {new Array(
+              Math.max(session?.links?.length ?? 0, initialLinksNumber)
+            )
               .fill(0)
               .map((_, index) => index)
               .map((index) =>
                 index < session?.links?.length ?? 0 ? (
-                  <PlatformLink
+                  <li
                     key={index}
-                    path={session.links[index].path}
-                    platformId={session.links[index].platform}
-                  />
+                    style={{ width: svgWidth ? svgWidth * 0.84 : undefined }}
+                    className="mx-auto flex items-center justify-center  px-[24.5px]"
+                  >
+                    <PlatformLink
+                      path={session.links[index].path}
+                      platformId={session.links[index].platform}
+                    />
+                  </li>
                 ) : (
-                  <li key={index} className="">
+                  <li
+                    key={index}
+                    style={{ width: svgWidth ? svgWidth * 0.84 : undefined }}
+                    className="mx-auto flex items-center justify-center  px-[24.5px]"
+                  >
                     <div className="h-11 w-[237px] rounded-lg bg-[#EEEEEE]" />
                   </li>
                 )

@@ -15,7 +15,7 @@ const PlatformLink = ({ path, platformId }: PlatformLinkProps) => {
     return (
       <a
         href={path}
-        className="group mx-auto flex max-w-[273px] items-center justify-between rounded-lg border border-borders bg-white p-4 text-bm text-dark-grey"
+        className="group mx-auto flex w-full max-w-[273px] items-center justify-between rounded-lg border border-borders bg-white p-4 text-bm text-dark-grey"
         target="_blank"
         rel="noreferrer"
       >
@@ -38,7 +38,7 @@ const PlatformLink = ({ path, platformId }: PlatformLinkProps) => {
   return (
     <a
       href={path}
-      className="group mx-auto flex max-w-[273px] items-center justify-between rounded-lg p-4 text-bm text-white"
+      className="group mx-auto flex w-full max-w-[273px] items-center justify-between rounded-lg p-4 text-bm text-white"
       style={{ backgroundColor: platform.color }}
       target="_blank"
       rel="noreferrer"
