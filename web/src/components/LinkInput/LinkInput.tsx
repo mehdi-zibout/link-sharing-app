@@ -1,3 +1,7 @@
+import { UniqueIdentifier } from '@dnd-kit/core'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import {
   Control,
   Controller,
@@ -20,14 +24,27 @@ type LinkInputProps = {
   index: number
   move: UseFieldArrayMove
   remove: UseFieldArrayRemove
+  dragHandlerId: UniqueIdentifier
 }
 
-const LinkInput = ({ register, index, control, remove }: LinkInputProps) => {
+const LinkInput = ({
+  register,
+  index,
+  control,
+  remove,
+  dragHandlerId,
+}: LinkInputProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: dragHandlerId })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
   return (
-    <Card className="space-y-3">
+    <Card style={style} className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
-          <button className="">
+          <button ref={setNodeRef} {...attributes} {...listeners}>
             <DragHandler className="h-1.5 w-3" />
             <span className="sr-only">Reorder</span>
           </button>

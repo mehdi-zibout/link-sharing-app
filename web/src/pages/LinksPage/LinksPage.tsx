@@ -1,5 +1,19 @@
 import { useEffect } from 'react'
 
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateLinks, UpdateLinksVariables } from 'types/graphql'
 import { z } from 'zod'
@@ -80,6 +94,10 @@ const LinksPage = () => {
     })
   })
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
   return (
     <>
       <MetaTags title="Links" description="Links page" />
@@ -108,18 +126,41 @@ const LinksPage = () => {
           </div>
           <div className="mt-6 h-[calc(100vh-465px)] space-y-6 overflow-y-auto md:h-[calc(100vh-520px)] xl:h-[calc(100vh-550px)]">
             {fields.length === 0 && <LinksEmptyState />}
-            {fields.map((field, index) => {
-              return (
-                <LinkInput
-                  key={field.id}
-                  index={index}
-                  control={formMethods.control}
-                  register={formMethods.register}
-                  move={move}
-                  remove={remove}
-                />
-              )
-            })}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(e) => {
+                const { active, over } = e
+                if (!over || active.id === over.id) return
+                const oldIndex = fields.findIndex(
+                  (field) => field.id === active.id
+                )
+                const newIndex = fields.findIndex(
+                  (field) => field.id === over.id
+                )
+                move(oldIndex, newIndex)
+              }}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <SortableContext
+                items={fields}
+                strategy={verticalListSortingStrategy}
+              >
+                {fields.map((field, index) => {
+                  return (
+                    <LinkInput
+                      key={field.id}
+                      dragHandlerId={field.id}
+                      index={index}
+                      control={formMethods.control}
+                      register={formMethods.register}
+                      move={move}
+                      remove={remove}
+                    />
+                  )
+                })}
+              </SortableContext>
+            </DndContext>
           </div>
         </CardWithButton>
       </Form>

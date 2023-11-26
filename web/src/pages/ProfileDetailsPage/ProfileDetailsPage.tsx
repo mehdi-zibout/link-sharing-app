@@ -94,7 +94,7 @@ const ProfileDetailsPage = () => {
             title="Profile Details"
             description="Add your details to create a personal touch to your profile."
           />
-          <div className="h-[calc(100vh-350px)] overflow-y-auto md:h-[calc(100vh-430px)] xl:h-[calc(100vh-442px)]">
+          <div className="h-[calc(100vh-354px)] overflow-y-auto md:h-[calc(100vh-408px)] xl:h-[calc(100vh-439px)]">
             <Card className="mb-6 mt-10">
               <h2 className="mb-4 text-bm text-grey">Profile picture</h2>
               <Controller
